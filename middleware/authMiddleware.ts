@@ -1,11 +1,11 @@
 import UserRepository from '../repositories/UserRepository.js';
 import bcrypt from "bcryptjs";
-const jwt = require("jsonwebtoken");
-import { Request, Response, NextFunction } from "express";
+import { Request, Response} from "express";
+import generateToken from '../helpers/generateToken.js';
 
 const secretKey = 'Manuela'; 
 
-const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+const authMiddleware = async (req: Request, res: Response) => {
     try {
         const { email, password }: { email: string; password: string } = req.body;
 
@@ -13,19 +13,20 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
 
         if (!storedPassword) {
             return res.status(401).json({ 
-                status: 'Documento o contraseña incorrecta'
+                status: 'email o contraseña incorrecta'
             });
         }
 
         const isPasswordValid = await bcrypt.compare(password, storedPassword);
         
         if (isPasswordValid) {
-            const token = jwt.sign({ email }, secretKey, { expiresIn: '1h' }); 
-            res.locals.token = token; 
-            next(); 
+            return res.status(200).json({
+                status: "Succesful Authentication",
+                token:  await generateToken(email)
+            })
         } else {
             return res.status(401).json({ 
-                status: 'Documento o contraseña incorrecta'
+                status: 'email o contraseña incorrecta'
             });
         }
     } catch (error) {
