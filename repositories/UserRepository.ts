@@ -1,4 +1,5 @@
 import db from '../config/config-db';
+import UserAuthentication from '../Dto/UserAuthDto';
 import User from '../Dto/UserDto';
 
 class UserRepository {
@@ -9,9 +10,9 @@ class UserRepository {
         return db.execute(sql, values);
     }
 
-    static async login(email : string){
+    static async login(auth : UserAuthentication){
         const sql = 'SELECT password FROM users WHERE email=?';
-        const values = [email];
+        const values = [auth];
         return db.execute(sql,values)
     }
     static async getUserPassword(email: string): Promise<string | null> {
