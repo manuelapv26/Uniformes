@@ -1,10 +1,25 @@
-const db = require('../config/config-db.js');
 import { Request, Response} from "express";
-import authMiddleware from "../middleware/authMiddleware";
+import generateToken from "../helpers/generateToken";
+import Auth from "../Dto/UserAuthDto";
+import UserService from "../services/UserServices";
 
 
-const authController = (req: Request, res: Response)=> {
-    authMiddleware(req, res);
+const authController = async (req: Request, res: Response)=> {
+    try {
+        const {email, password} = req.body;
+        const result : any= await UserService.auth(new Auth(email,password));
+        if (result.logged){
+            return res.status(200).json({
+                status: "Succesful Authentication",
+                token:  await generateToken(email)
+            })
+        }
+        return res.status(401).json({ 
+            status: 'Incorrect username or password'
+        });
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 export default authController;

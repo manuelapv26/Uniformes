@@ -3,17 +3,19 @@ class User {
     private _nombres: string;
     private _apellidos: string;
     private _telefono: string;
+    private _domicilio: string;
     private _password: string
   static username: any;
     constructor(
         email: string, nombres: string,
         apellidos: string, telefono: string,
-        password: string
+        domicilio:string, password: string
     ) {
         this._email = email;
         this._nombres = nombres;
         this._apellidos = apellidos;
         this._telefono = telefono;
+        this._domicilio = domicilio;
         this._password = password
     }
 
@@ -31,6 +33,9 @@ class User {
 
     get telefono(): string{
         return this._telefono
+    }
+    get domicilio(): string{
+        return this._domicilio
     }
     get password(): string{
         return this._password
@@ -52,7 +57,9 @@ class User {
     set telefono(telefono:string){
         this._telefono = telefono
     }
-
+    set domicilio(domicilio:string){
+        this._domicilio = domicilio
+    }
     set password(password:string){
         this._password = password
     }

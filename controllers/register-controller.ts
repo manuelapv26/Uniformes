@@ -6,10 +6,10 @@ import User from '../Dto/UserDto';
 let register = async (req: Request, res: Response) => {
   try {
     // Extraer datos del cuerpo de la solicitud
-    const { email, nombres, apellidos, telefono, password } = req.body;
+    const { email, nombres, apellidos, telefono,domicilio, password } = req.body;
 
     // Validar que todos los campos requeridos estén presentes y no sean undefined
-    if (!email || !nombres || !apellidos || !telefono || !password) {
+    if (!email || !nombres || !apellidos || !telefono ||!domicilio || !password) {
       throw new Error('Todos los campos son requeridos.');
     }
 
@@ -20,7 +20,7 @@ let register = async (req: Request, res: Response) => {
     console.log('Datos recibidos:', req.body); // Imprimir datos recibidos
 
     // Crear una nueva instancia de User con los datos validados
-    const newUser = new User(email, nombres, apellidos, telefono, hashedPassword);
+    const newUser = new User(email, nombres, apellidos, telefono,domicilio, hashedPassword);
 
     // Llamar a UserRepository.add con la instancia newUser como parámetro
     const insertResult = await UserRepository.add(newUser);
